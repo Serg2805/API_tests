@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "706b243a-e4ca-4b28-9c2a-4b640a4281c3",
+		"name": "SCAN interfax v.2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17640427"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/api/v1/account/login\" with correct data is 200', function () {",
+							"    pm.response.to.have.status(200)",
+							"    ",
+							"    const responseJsonData = pm.response.json();",
+							"    pm.environment.set(\"accessToken\", responseJsonData.accessToken);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"login\": \"{{test_login}}\",\n  \"password\": \"{{test_password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gateway.scan-interfax.ru/api/v1/account/login",
+					"protocol": "https",
+					"host": [
+						"gateway",
+						"scan-interfax",
+						"ru"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get current balance of user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJsonData = pm.response.json();",
+							"pm.environment.set(\"current_balance\", responseJsonData.balance);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gateway.scan-interfax.ru/api/v1/account/balance",
+					"protocol": "https",
+					"host": [
+						"gateway",
+						"scan-interfax",
+						"ru"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get subjects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJsonData = pm.response.json();",
+							"pm.environment.set(\"subjects_name1\", responseJsonData.subjects[0].name);",
+							"pm.environment.set(\"subjects_name2\", responseJsonData.subjects[1].name);",
+							"pm.environment.set(\"subjects_name3\", responseJsonData.subjects[2].name);",
+							"pm.environment.set(\"subjects_total\", responseJsonData.totalCount);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://gateway.scan-interfax.ru/api/v1/entities/subjects?index=0&pageSize=3",
+					"protocol": "https",
+					"host": [
+						"gateway",
+						"scan-interfax",
+						"ru"
+					],
+					"path": [
+						"api",
+						"v1",
+						"entities",
+						"subjects"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get documents ScanDoc",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/api/v1/documents\" is 200', function () {",
+							"    pm.response.to.have.status(200)",
+							"    ",
+							"    const responseJsonData = pm.response.json();",
+							"    pm.environment.set(\"news_agent_1\", responseJsonData[0].ok.source.name);",
+							"    pm.environment.set(\"news_agent_2\", responseJsonData[1].ok.source.name);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ids\": [\n    \"{{id1}}\",\n    \"{{id2}}\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gateway.scan-interfax.ru/api/v1/documents",
+					"protocol": "https",
+					"host": [
+						"gateway",
+						"scan-interfax",
+						"ru"
+					],
+					"path": [
+						"api",
+						"v1",
+						"documents"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

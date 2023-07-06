@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "9990d0b1-cd3a-4079-979f-673b85530ec8",
+		"name": "Ludio games (Registration)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17640427"
+	},
+	"item": [
+		{
+			"name": "Registration with correct regitration data",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate a random string of characters",
+							"function generateRandomString(length) {",
+							"  let result = '';",
+							"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+							"  const charactersLength = characters.length;",
+							"  for (let i = 0; i < length; i++) {",
+							"    result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+							"  }",
+							"  return result;",
+							"}",
+							"",
+							"// Generate a random email address",
+							"function generateRandomEmail() {",
+							"  const domain = 'hotmail.com'; // Replace with your desired domain",
+							"  const nameLength = 10; // Length of the username part of the email",
+							"  const randomString = generateRandomString(nameLength);",
+							"  return `${randomString}@${domain}`;",
+							"}",
+							"",
+							"function generateNewEmail() {",
+							"  const domain = 'hotmail.com'; // Replace with your desired domain",
+							"  const nameLength = 10; // Length of the username part of the email",
+							"  const randomString = generateRandomString(nameLength);",
+							"  return `${randomString}@${domain}`;",
+							"}",
+							"",
+							"//Generate a random username",
+							"function generateRandomUsername() {",
+							"    const usernameLength = 8;",
+							"    const randomUsername = generateRandomString(usernameLength);",
+							"    return `${randomUsername}`;",
+							"}",
+							"",
+							"//Generate a random correct password",
+							"function generateCorrectPassword() {",
+							"    const passwordLenght = 10;",
+							"    const randomCorrectPassword = generateRandomString(passwordLenght);",
+							"    return `${randomCorrectPassword}`;",
+							"}",
+							"",
+							"// Set the random email address as an environment variable",
+							"pm.environment.set('correctEmail', generateRandomEmail());",
+							"pm.environment.set('correctUsername', generateRandomUsername());",
+							"pm.environment.set('correctPassword', generateCorrectPassword());",
+							"pm.environment.set('newEmail', generateNewEmail()); ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/auth/register\" with correct data is 201', function () {",
+							"    pm.response.to.have.status(201)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\":\"INDIVIDUAL\",\n  \"name\": \"{{correctUsername}}\",\n  \"email\": \"{{correctEmail}}\",\n  \"password\": \"{{correctPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/auth/register",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration with non-correct email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate a random string of characters",
+							"function generateRandomString(length) {",
+							"  let result = '';",
+							"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+							"  const charactersLength = characters.length;",
+							"  for (let i = 0; i < length; i++) {",
+							"    result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+							"  }",
+							"  return result;",
+							"}",
+							"",
+							"// Generate a random email address",
+							"function generateRandomEmail() {",
+							"  const domain = 'hotmail.com'; // Replace with your desired domain",
+							"  const nameLength = 10; // Length of the username part of the email",
+							"  const randomString = generateRandomString(nameLength);",
+							"  return `${randomString}${domain}`;",
+							"}",
+							"",
+							"//Generate a random username",
+							"function generateRandomUsername() {",
+							"    const usernameLength = 8;",
+							"    const randomUsername = generateRandomString(usernameLength);",
+							"    return `${randomUsername}`;",
+							"}",
+							"console.log(generateRandomEmail());",
+							"//Generate a random correct password",
+							"function generateCorrectPassword() {",
+							"    const passwordLenght = 10;",
+							"    const randomCorrectPassword = generateRandomString(passwordLenght);",
+							"    return `${randomCorrectPassword}`;",
+							"}",
+							"",
+							"// Set the random email address as an environment variable",
+							"pm.environment.set('nonCorrectEmail', generateRandomEmail());",
+							"pm.environment.set('correctUsername', generateRandomUsername());",
+							"pm.environment.set('correctPassword', generateCorrectPassword); "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/auth/register\" with non-correct email is 400', function () {",
+							"    pm.response.to.have.status(400)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\":\"INDIVIDUAL\",\n  \"name\": \"{{correctUsername}}\",\n  \"email\": \"{{nonCorrectEmail}}\",\n  \"password\": \"{{correctPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/auth/register",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration with exist email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/auth/register\" with exist email is 409', function () {",
+							"    pm.response.to.have.status(409)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\":\"INDIVIDUAL\",\n  \"name\": \"{{correctUsername}}\",\n  \"email\": \"{{correctEmail}}\",\n  \"password\": \"{{correctPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/auth/register",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration with non-correct account type",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/auth/register\" with non-correct account type is 400', function () {",
+							"    pm.response.to.have.status(400)",
+							"",
+							"    const responseJsonData = pm.response.json();",
+							"    pm.expect(responseJsonData.message).is.equal(\"Domain is public\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\":\"ORGANIZATION\",\n  \"name\": \"{{correctUsername}}\",\n  \"email\": \"{{newEmail}}\",\n  \"password\": \"{{correctPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/auth/register",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration organization account",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate a random string of characters",
+							"function generateRandomString(length) {",
+							"  let result = '';",
+							"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+							"  const charactersLength = characters.length;",
+							"  for (let i = 0; i < length; i++) {",
+							"    result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+							"  }",
+							"  return result;",
+							"}",
+							"",
+							"// Generate a random email address",
+							"function generateRandomEmail() {",
+							"  const domain = 'kul.de'; // Replace with your desired domain",
+							"  const nameLength = 4; // Length of the username part of the email",
+							"  const randomString = generateRandomString(nameLength);",
+							"  return `${randomString}@${domain}`;",
+							"}",
+							"",
+							"//Generate a random username",
+							"function generateRandomUsername() {",
+							"    const usernameLength = 15;",
+							"    const randomUsername = generateRandomString(usernameLength);",
+							"    return `${randomUsername}`;",
+							"}",
+							"",
+							"//Generate a random correct password",
+							"function generateCorrectPassword() {",
+							"    const passwordLenght = 10;",
+							"    const randomCorrectPassword = generateRandomString(passwordLenght);",
+							"    return `${randomCorrectPassword}`;",
+							"}",
+							"",
+							"// Set the random email address as an environment variable",
+							"pm.environment.set('emailOrg', generateRandomEmail());",
+							"pm.environment.set('correctUsername', generateRandomUsername());",
+							"pm.environment.set('correctPassword', generateCorrectPassword()); "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Response Status code from \"/auth/register\" with email organization is 201', function () {",
+							"    pm.response.to.have.status(201)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountType\":\"ORGANIZATION\",\n  \"name\": \"{{correctUsername}}\",\n  \"email\": \"{{emailOrg}}\",\n  \"password\": \"{{correctPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_Url}}/auth/register",
+					"host": [
+						"{{base_Url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
